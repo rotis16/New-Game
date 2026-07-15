@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { IconBtn } from "./ui.jsx";
+import { IconBtn, SectionLabel } from "./ui.jsx";
+import { THEMES } from "../theme.js";
 
 export default function SettingsScreen({ settings, onChange, onResetStats, onBack, onReplayTutorial }) {
   const [confirmReset, setConfirmReset] = useState(false);
@@ -8,16 +9,25 @@ export default function SettingsScreen({ settings, onChange, onResetStats, onBac
     <div style={{ maxWidth: 420, width: "100%", marginTop: "3vh", animation: "bl-rise 0.4s ease" }}>
       <div style={{ display: "flex", alignItems: "center", marginBottom: 18 }}>
         <IconBtn onClick={onBack}>‹ Menu</IconBtn>
-        <div style={{ flex: 1, textAlign: "center", fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 20, color: "#e8d5b5" }}>
+        <div className="bl-display" style={{ flex: 1, textAlign: "center", fontWeight: 700, fontSize: 20, color: "var(--ink)" }}>
           Settings
         </div>
         <div style={{ width: 60 }} />
       </div>
 
+      <div style={{ marginBottom: 22 }}>
+        <SectionLabel>Look</SectionLabel>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 10 }}>
+          {THEMES.map((t) => (
+            <ThemeRow key={t.id} theme={t} active={settings.theme === t.id} onClick={() => onChange({ ...settings, theme: t.id })} />
+          ))}
+        </div>
+      </div>
+
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <ToggleRow
           label="Sound"
-          sub="Wood ticks, wall clacks, win flourish"
+          sub="Move ticks, wall clacks, win flourish"
           checked={settings.sound}
           onChange={(v) => onChange({ ...settings, sound: v })}
         />
@@ -30,17 +40,15 @@ export default function SettingsScreen({ settings, onChange, onResetStats, onBac
 
         <button
           onClick={onReplayTutorial}
+          className="bl-panel"
           style={{
             marginTop: 8,
             padding: "16px 18px",
             minHeight: 44,
-            borderRadius: 14,
             textAlign: "left",
-            border: "1px solid rgba(236,224,205,0.08)",
-            background: "rgba(236,224,205,0.04)",
-            color: "#e8d5b5",
+            color: "var(--ink)",
             fontFamily: "inherit",
-            fontWeight: 600,
+            fontWeight: 700,
             fontSize: 14,
             cursor: "pointer",
           }}
@@ -61,13 +69,13 @@ export default function SettingsScreen({ settings, onChange, onResetStats, onBac
             marginTop: 8,
             padding: "16px 18px",
             minHeight: 44,
-            borderRadius: 14,
+            borderRadius: "var(--radius-md)",
             textAlign: "left",
-            border: confirmReset ? "1px solid #c9695a" : "1px solid rgba(236,224,205,0.08)",
-            background: confirmReset ? "rgba(201,105,90,0.12)" : "rgba(236,224,205,0.04)",
-            color: confirmReset ? "#e8a89c" : "#e8d5b5",
+            border: confirmReset ? "1px solid var(--danger)" : "1px solid rgba(var(--ink-rgb), 0.09)",
+            background: confirmReset ? "rgba(var(--danger-rgb), 0.12)" : "rgba(var(--ink-rgb), 0.045)",
+            color: confirmReset ? "var(--danger)" : "var(--ink)",
             fontFamily: "inherit",
-            fontWeight: 600,
+            fontWeight: 700,
             fontSize: 14,
             cursor: "pointer",
           }}
@@ -79,51 +87,65 @@ export default function SettingsScreen({ settings, onChange, onResetStats, onBac
   );
 }
 
+function ThemeRow({ theme, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        padding: "12px 14px",
+        minHeight: 44,
+        borderRadius: "var(--radius-md)",
+        textAlign: "left",
+        cursor: "pointer",
+        fontFamily: "inherit",
+        border: active ? "1.5px solid var(--accent)" : "1.5px solid rgba(var(--ink-rgb), 0.09)",
+        background: active ? "rgba(var(--accent-rgb), 0.1)" : "rgba(var(--ink-rgb), 0.03)",
+      }}
+    >
+      <div style={{ display: "flex", flexShrink: 0 }}>
+        {theme.swatches.map((hex, i) => (
+          <div
+            key={i}
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: "50%",
+              background: hex,
+              border: "1px solid rgba(0,0,0,0.15)",
+              marginLeft: i === 0 ? 0 : -5,
+            }}
+          />
+        ))}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>{theme.name}</div>
+        <div style={{ fontSize: 12, color: "var(--ink-faint)", marginTop: 1 }}>{theme.blurb}</div>
+      </div>
+      {active && <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>Active</div>}
+    </button>
+  );
+}
+
 function ToggleRow({ label, sub, checked, onChange }) {
   return (
     <div
+      className="bl-panel"
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         padding: "14px 18px",
-        borderRadius: 14,
-        background: "rgba(236,224,205,0.04)",
-        border: "1px solid rgba(236,224,205,0.08)",
       }}
     >
       <div>
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#e8d5b5" }}>{label}</div>
-        <div style={{ fontSize: 12, color: "#8a7458", marginTop: 2 }}>{sub}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>{label}</div>
+        <div style={{ fontSize: 12, color: "var(--ink-faint)", marginTop: 2 }}>{sub}</div>
       </div>
-      <button
-        onClick={() => onChange(!checked)}
-        role="switch"
-        aria-checked={checked}
-        style={{
-          width: 46,
-          height: 28,
-          borderRadius: 14,
-          border: "none",
-          cursor: "pointer",
-          position: "relative",
-          background: checked ? "#d0a86a" : "rgba(236,224,205,0.15)",
-          transition: "background 0.15s",
-          flexShrink: 0,
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 3,
-            left: checked ? 21 : 3,
-            width: 22,
-            height: 22,
-            borderRadius: "50%",
-            background: "#20160f",
-            transition: "left 0.15s",
-          }}
-        />
+      <button onClick={() => onChange(!checked)} role="switch" aria-checked={checked} className={`bl-toggle-track${checked ? " checked" : ""}`}>
+        <div className="bl-toggle-thumb" />
       </button>
     </div>
   );

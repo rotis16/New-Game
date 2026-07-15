@@ -16,29 +16,28 @@ export default function MiniBoard() {
       style={{
         position: "relative",
         padding: 12,
-        borderRadius: 16,
-        background: "linear-gradient(155deg, #4a3320 0%, #2e2011 55%, #1c1207 100%)",
-        boxShadow: "0 20px 44px rgba(0,0,0,0.55), inset 0 2px 0 rgba(236,224,205,0.08), inset 0 -2px 6px rgba(0,0,0,0.4)",
-        border: "1px solid rgba(140,100,60,0.3)",
+        borderRadius: "var(--radius-md)",
+        background: "var(--board-frame-bg)",
+        boxShadow: "var(--shadow-card)",
+        border: "var(--outline-width) solid var(--outline)",
       }}
     >
       <div style={{ position: "relative", width: px, height: px }}>
         {Array.from({ length: N - 1 }).map((_, i) => (
           <div
             key={`mh${i}`}
-            style={{ position: "absolute", left: 0, top: (i + 1) * c + i * g, width: px, height: g, background: "rgba(0,0,0,0.3)", borderRadius: g }}
+            style={{ position: "absolute", left: 0, top: (i + 1) * c + i * g, width: px, height: g, background: "rgba(var(--ink-rgb), 0.12)", borderRadius: g }}
           />
         ))}
         {Array.from({ length: N - 1 }).map((_, i) => (
           <div
             key={`mv${i}`}
-            style={{ position: "absolute", top: 0, left: (i + 1) * c + i * g, height: px, width: g, background: "rgba(0,0,0,0.3)", borderRadius: g }}
+            style={{ position: "absolute", top: 0, left: (i + 1) * c + i * g, height: px, width: g, background: "rgba(var(--ink-rgb), 0.12)", borderRadius: g }}
           />
         ))}
         {Array.from({ length: N }).map((_, row) =>
           Array.from({ length: N }).map((_, col) => {
-            const shade = ((row * 7 + col * 13) % 5) - 2;
-            const b = 196 + shade * 3;
+            const alt = (row + col) % 2 === 1;
             const gr = row === 4;
             const rd = row === 0;
             return (
@@ -54,8 +53,9 @@ export default function MiniBoard() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  background: `linear-gradient(155deg, rgb(${b},${b - 38},${b - 92}) 0%, rgb(${b - 20},${b - 58},${b - 116}) 100%)`,
-                  boxShadow: "inset 0 1px 1px rgba(255,240,215,0.3), inset 0 -2px 3px rgba(90,60,30,0.4)",
+                  backgroundColor: alt ? "var(--tile-b)" : "var(--tile-a)",
+                  backgroundImage: "var(--board-texture)",
+                  backgroundSize: "var(--board-texture-size)",
                 }}
               >
                 {(gr || rd) && (
@@ -66,7 +66,7 @@ export default function MiniBoard() {
                       opacity: 0.35,
                       borderLeft: "4px solid transparent",
                       borderRight: "4px solid transparent",
-                      ...(rd ? { borderBottom: "5px solid rgba(168,72,58,0.9)" } : { borderTop: "5px solid rgba(74,124,63,0.9)" }),
+                      ...(rd ? { borderBottom: "5px solid var(--p2)" } : { borderTop: "5px solid var(--p1)" }),
                     }}
                   />
                 )}
@@ -89,8 +89,8 @@ export default function MiniBoard() {
             height: g + 2,
             borderRadius: g,
             zIndex: 6,
-            background: "linear-gradient(180deg, #f0d6a2 0%, #d9ab68 45%, #b5823f 100%)",
-            boxShadow: "0 3px 6px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 1px rgba(90,55,20,0.5)",
+            background: "var(--wall-color)",
+            boxShadow: "var(--wall-shadow)",
           }}
         />
         <div
@@ -102,8 +102,8 @@ export default function MiniBoard() {
             height: c * 2 + g + 2,
             borderRadius: g,
             zIndex: 6,
-            background: "linear-gradient(90deg, #f0d6a2 0%, #d9ab68 45%, #b5823f 100%)",
-            boxShadow: "3px 0 6px rgba(0,0,0,0.55), inset 1px 0 0 rgba(255,255,255,0.5), inset -1px 0 1px rgba(90,55,20,0.5)",
+            background: "var(--wall-color)",
+            boxShadow: "var(--wall-shadow)",
           }}
         />
       </div>

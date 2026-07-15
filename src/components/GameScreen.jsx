@@ -44,17 +44,25 @@ export default function GameScreen(props) {
     <div style={{ width: "100%", maxWidth: 480 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
         <IconBtn onClick={onMenu}>‹ Menu</IconBtn>
-        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 22, color: "#e8d5b5" }}>Blocade</div>
+        <div className="bl-display" style={{ fontWeight: 700, fontSize: 20, color: "var(--ink)" }}>
+          Blocade
+        </div>
         <IconBtn onClick={onRestart}>Restart</IconBtn>
       </div>
 
       <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
         <PlayerPanel color="green" name="You" walls={wallsLeft[1]} active={turn === 1 && !winner} align="left" />
-        <PlayerPanel color="red" name={mode === "ai" ? `CPU · ${difficulty}` : "Player 2"} walls={wallsLeft[2]} active={turn === 2 && !winner} align="right" />
+        <PlayerPanel
+          color="red"
+          name={mode === "ai" ? `CPU · ${difficulty}` : "Player 2"}
+          walls={wallsLeft[2]}
+          active={turn === 2 && !winner}
+          align="right"
+        />
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-        <div style={{ fontSize: 12, color: "#8a7458" }}>Move {moveCount}</div>
+        <div style={{ fontSize: 12, color: "var(--ink-faint)" }}>Move {moveCount}</div>
         {mode === "ai" && (
           <div style={{ display: "flex", gap: 6 }}>
             <SmallToggle active={hintsEnabled} onClick={onToggleHint}>
@@ -67,9 +75,9 @@ export default function GameScreen(props) {
         )}
       </div>
 
-      <div style={{ textAlign: "center", marginBottom: 14, height: 22, fontSize: 14, fontWeight: 500, color: "#c4b299" }}>
+      <div style={{ textAlign: "center", marginBottom: 14, height: 22, fontSize: 14, fontWeight: 500, color: "var(--ink-soft)" }}>
         {winner ? (
-          <span style={{ color: "#e8d5b5", fontWeight: 600 }}>{winner === 1 ? "You win!" : `${p2Label} wins`}</span>
+          <span style={{ color: "var(--ink)", fontWeight: 700 }}>{winner === 1 ? "You win!" : `${p2Label} wins`}</span>
         ) : mode === "ai" && turn === 2 ? (
           <span style={{ animation: "bl-pulse 1.2s ease-in-out infinite" }}>{aiThinking ? "Computer is thinking…" : "Computer's turn"}</span>
         ) : (
@@ -99,7 +107,7 @@ export default function GameScreen(props) {
 
       {!winner && myTurn && (
         <div style={{ marginTop: 18 }}>
-          <div style={{ display: "flex", gap: 8, padding: 5, borderRadius: 14, background: "rgba(236,224,205,0.05)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 5, borderRadius: 14, background: "rgba(var(--ink-rgb), 0.05)" }}>
             <SegBtn active={!placing} onClick={() => setPlacing(false)}>
               Move
             </SegBtn>
@@ -150,9 +158,9 @@ function SmallToggle({ children, active, onClick, disabled }) {
         fontFamily: "inherit",
         cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.35 : 1,
-        border: active ? "1px solid #d0a86a" : "1px solid rgba(236,224,205,0.12)",
-        background: active ? "rgba(208,168,106,0.14)" : "transparent",
-        color: active ? "#f4e8d4" : "#a89072",
+        border: active ? "1px solid var(--accent)" : "1px solid rgba(var(--ink-rgb), 0.14)",
+        background: active ? "rgba(var(--accent-rgb), 0.16)" : "transparent",
+        color: active ? "var(--ink)" : "var(--ink-soft)",
       }}
     >
       {children}

@@ -7,7 +7,7 @@ export default function StatsScreen({ stats, onBack }) {
     <div style={{ maxWidth: 420, width: "100%", marginTop: "3vh", animation: "bl-rise 0.4s ease" }}>
       <div style={{ display: "flex", alignItems: "center", marginBottom: 18 }}>
         <IconBtn onClick={onBack}>‹ Menu</IconBtn>
-        <div style={{ flex: 1, textAlign: "center", fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 20, color: "#e8d5b5" }}>
+        <div className="bl-display" style={{ flex: 1, textAlign: "center", fontWeight: 700, fontSize: 20, color: "var(--ink)" }}>
           Stats
         </div>
         <div style={{ width: 60 }} />
@@ -20,29 +20,21 @@ export default function StatsScreen({ stats, onBack }) {
           const total = s.wins + s.losses;
           const winPct = total ? Math.round((s.wins / total) * 100) : 0;
           return (
-            <div
-              key={d}
-              style={{
-                padding: "16px 18px",
-                borderRadius: 14,
-                background: "rgba(236,224,205,0.04)",
-                border: "1px solid rgba(236,224,205,0.08)",
-              }}
-            >
+            <div key={d} className="bl-panel" style={{ padding: "16px 18px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 17, textTransform: "capitalize", color: "#f0e2c8" }}>
+                <div className="bl-display" style={{ fontWeight: 700, fontSize: 17, textTransform: "capitalize", color: "var(--ink)" }}>
                   {d}
                 </div>
-                <div style={{ fontSize: 12, color: "#8a7458" }}>{total} played</div>
+                <div style={{ fontSize: 12, color: "var(--ink-faint)" }}>{total} played</div>
               </div>
               <div style={{ display: "flex", gap: 18, marginTop: 10 }}>
-                <Stat label="Wins" value={s.wins} color="#6fae5a" />
-                <Stat label="Losses" value={s.losses} color="#c9695a" />
+                <Stat label="Wins" value={s.wins} color="var(--success)" />
+                <Stat label="Losses" value={s.losses} color="var(--danger)" />
                 <Stat label="Win rate" value={`${winPct}%`} />
                 <Stat
                   label="Streak"
                   value={streak.count > 0 ? `${streak.count}${streak.type === "win" ? "W" : "L"}` : "—"}
-                  color={streak.type === "win" ? "#6fae5a" : streak.type === "loss" ? "#c9695a" : undefined}
+                  color={streak.type === "win" ? "var(--success)" : streak.type === "loss" ? "var(--danger)" : undefined}
                 />
               </div>
             </div>
@@ -62,8 +54,10 @@ export default function StatsScreen({ stats, onBack }) {
 function Stat({ label, value, color }) {
   return (
     <div>
-      <div style={{ fontSize: 16, fontWeight: 700, color: color || "#e8d5b5", fontFamily: "'Fraunces', serif" }}>{value}</div>
-      <div style={{ fontSize: 10, color: "#8a7458", textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</div>
+      <div className="bl-display" style={{ fontSize: 16, fontWeight: 700, color: color || "var(--ink)" }}>
+        {value}
+      </div>
+      <div style={{ fontSize: 10, color: "var(--ink-faint)", textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</div>
     </div>
   );
 }

@@ -9,8 +9,9 @@ import GameScreen from "./components/GameScreen.jsx";
 import StatsScreen from "./components/StatsScreen.jsx";
 import SettingsScreen from "./components/SettingsScreen.jsx";
 import Tutorial from "./components/Tutorial.jsx";
+import { DEFAULT_THEME, THEMES } from "./theme.js";
 
-const DEFAULT_SETTINGS = { sound: true, hints: false, tutorialSeen: false };
+const DEFAULT_SETTINGS = { sound: true, hints: false, tutorialSeen: false, theme: DEFAULT_THEME };
 const DEFAULT_STATS = {
   byDifficulty: { easy: { wins: 0, losses: 0 }, medium: { wins: 0, losses: 0 }, hard: { wins: 0, losses: 0 } },
   streaks: { easy: { type: null, count: 0 }, medium: { type: null, count: 0 }, hard: { type: null, count: 0 } },
@@ -34,6 +35,13 @@ export default function App() {
   const aiCancelRef = useRef(null);
 
   useEffect(() => setMuted(!settings.sound), [settings.sound]);
+  useEffect(() => {
+    const themeId = settings.theme || DEFAULT_THEME;
+    document.documentElement.dataset.theme = themeId;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const theme = THEMES.find((t) => t.id === themeId);
+    if (meta && theme) meta.setAttribute("content", theme.pageColor);
+  }, [settings.theme]);
   useEffect(() => () => clearTimeout(aiHighlightTimer.current), []);
 
   const { walls, positions, wallsLeft, toMove: turn, winner, mode, difficulty, lastAction, moveCount, history } = state;
@@ -162,12 +170,9 @@ export default function App() {
   return (
     <>
       <div
-        className="bl-root"
+        className="bl-root bl-page"
         style={{
           minHeight: "100vh",
-          background: "radial-gradient(120% 80% at 50% -10%, #3a2a1c 0%, #201610 55%, #150e09 100%)",
-          fontFamily: "'Inter', system-ui, sans-serif",
-          color: "#ece0cd",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
