@@ -39,6 +39,7 @@ export default function Board({
   const boardPx = SIZE * cell + (SIZE - 1) * gap;
   const posFor = (row, col) => ({ left: col * (cell + gap), top: row * (cell + gap) });
   const hintSet = pathHint ? new Set(pathHint.map((p) => `${p.row}-${p.col}`)) : null;
+  const turnColorRgb = turn === 1 ? "var(--p1-rgb)" : "var(--p2-rgb)";
 
   return (
     <div ref={wrapRef} style={{ width: "100%" }}>
@@ -46,12 +47,11 @@ export default function Board({
         key={shakeId}
         style={{
           position: "relative",
-          background: "linear-gradient(155deg, #4a3320 0%, #3a2817 40%, #241809 100%)",
-          borderRadius: 22,
+          background: "var(--board-frame-bg)",
+          borderRadius: "var(--radius-lg)",
           padding: 18,
-          boxShadow:
-            "0 30px 70px rgba(0,0,0,0.6), 0 6px 16px rgba(0,0,0,0.5), inset 0 2px 0 rgba(236,224,205,0.1), inset 0 -3px 8px rgba(0,0,0,0.4)",
-          border: "1px solid rgba(140,100,60,0.35)",
+          boxShadow: "var(--shadow-card)",
+          border: "var(--outline-width) solid var(--outline)",
           animation: shakeId ? "bl-shake 0.28s ease" : "none",
         }}
       >
@@ -63,8 +63,8 @@ export default function Board({
             margin: "0 auto",
             padding: 8,
             borderRadius: 14,
-            background: "linear-gradient(160deg, #2a1c0e 0%, #1c1207 100%)",
-            boxShadow: "inset 0 3px 10px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(236,224,205,0.05)",
+            background: "var(--board-inner-bg)",
+            boxShadow: "inset 0 3px 10px rgba(var(--ink-rgb), 0.18)",
           }}
         >
           <div style={{ position: "relative", width: boardPx, height: boardPx, margin: "0 auto" }}>
@@ -77,7 +77,7 @@ export default function Board({
                   top: (i + 1) * cell + i * gap,
                   width: boardPx,
                   height: gap,
-                  background: "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 50%, rgba(255,255,255,0.04) 100%)",
+                  background: "rgba(var(--ink-rgb), 0.12)",
                   borderRadius: gap,
                   pointerEvents: "none",
                 }}
@@ -92,7 +92,7 @@ export default function Board({
                   left: (i + 1) * cell + i * gap,
                   height: boardPx,
                   width: gap,
-                  background: "linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 50%, rgba(255,255,255,0.04) 100%)",
+                  background: "rgba(var(--ink-rgb), 0.12)",
                   borderRadius: gap,
                   pointerEvents: "none",
                 }}
@@ -107,9 +107,7 @@ export default function Board({
                 const p1Here = positions[1].row === row && positions[1].col === col;
                 const p2Here = positions[2].row === row && positions[2].col === col;
                 const onHint = hintSet?.has(`${row}-${col}`) && !p1Here && !p2Here;
-                const shade = ((row * 7 + col * 13) % 5) - 2;
-                const base1 = 196 + shade * 3;
-                const base2 = 176 + shade * 3;
+                const alt = (row + col) % 2 === 1;
                 return (
                   <div
                     key={`c-${row}-${col}`}
@@ -126,20 +124,11 @@ export default function Board({
                       alignItems: "center",
                       justifyContent: "center",
                       cursor: isLegal ? "pointer" : "default",
-                      background: `linear-gradient(155deg, rgb(${base1},${base1 - 38},${base1 - 92}) 0%, rgb(${base2},${base2 - 40},${base2 - 96}) 100%)`,
-                      boxShadow: "inset 0 1px 1px rgba(255,240,215,0.35), inset 0 -2px 4px rgba(90,60,30,0.4), inset 2px 0 3px rgba(90,60,30,0.15)",
+                      backgroundColor: alt ? "var(--tile-b)" : "var(--tile-a)",
+                      backgroundImage: "var(--board-texture)",
+                      backgroundSize: "var(--board-texture-size)",
                     }}
                   >
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        borderRadius: 6,
-                        pointerEvents: "none",
-                        opacity: 0.5,
-                        background: `repeating-linear-gradient(${88 + shade * 4}deg, rgba(110,74,38,0.12) 0px, rgba(110,74,38,0) ${3 + (shade + 2)}px, rgba(150,110,64,0.08) ${7 + (shade + 2)}px, rgba(110,74,38,0.10) ${11 + (shade + 2)}px)`,
-                      }}
-                    />
                     {(isGoalP1 || isGoalP2) && !p1Here && !p2Here && (
                       <div
                         style={{
@@ -149,8 +138,8 @@ export default function Board({
                           borderLeft: `${cell * 0.14}px solid transparent`,
                           borderRight: `${cell * 0.14}px solid transparent`,
                           ...(isGoalP1
-                            ? { borderBottom: `${cell * 0.16}px solid rgba(74,124,63,0.8)` }
-                            : { borderTop: `${cell * 0.16}px solid rgba(168,72,58,0.8)` }),
+                            ? { borderBottom: `${cell * 0.16}px solid var(--p1)` }
+                            : { borderTop: `${cell * 0.16}px solid var(--p2)` }),
                         }}
                       />
                     )}
@@ -160,8 +149,8 @@ export default function Board({
                           position: "absolute",
                           inset: cell * 0.32,
                           borderRadius: "50%",
-                          background: "rgba(232,200,143,0.35)",
-                          boxShadow: "inset 0 0 0 1.5px rgba(232,200,143,0.6)",
+                          background: "rgba(var(--accent-rgb), 0.35)",
+                          boxShadow: "inset 0 0 0 1.5px rgba(var(--accent-rgb), 0.6)",
                         }}
                       />
                     )}
@@ -172,8 +161,8 @@ export default function Board({
                           width: cell * 0.3,
                           height: cell * 0.3,
                           borderRadius: "50%",
-                          background: turn === 1 ? "rgba(74,124,63,0.5)" : "rgba(168,72,58,0.5)",
-                          boxShadow: `inset 0 1px 2px rgba(0,0,0,0.35), 0 0 0 ${cell * 0.05}px ${turn === 1 ? "rgba(74,124,63,0.14)" : "rgba(168,72,58,0.14)"}`,
+                          background: `rgba(${turnColorRgb}, 0.5)`,
+                          boxShadow: `inset 0 1px 2px rgba(0,0,0,0.25), 0 0 0 ${cell * 0.05}px rgba(${turnColorRgb}, 0.14)`,
                           animation: "bl-pop 0.25s ease",
                         }}
                       />
@@ -220,19 +209,15 @@ export default function Board({
                         height: gap + 2,
                         borderRadius: gap,
                         background: placed
-                          ? "linear-gradient(180deg, #f0d6a2 0%, #d9ab68 45%, #b5823f 100%)"
+                          ? "var(--wall-color)"
                           : showGhost
                             ? valid
-                              ? "rgba(120,190,96,0.85)"
-                              : "rgba(184,80,64,0.85)"
+                              ? "rgba(var(--success-rgb), 0.85)"
+                              : "rgba(var(--danger-rgb), 0.85)"
                             : activeSlot
-                              ? "rgba(236,224,205,0.16)"
+                              ? "rgba(var(--ink-rgb), 0.14)"
                               : "transparent",
-                        boxShadow: placed
-                          ? "0 3px 6px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.25), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 1px rgba(90,55,20,0.5)"
-                          : showGhost
-                            ? "0 2px 8px rgba(0,0,0,0.35)"
-                            : "none",
+                        boxShadow: placed ? "var(--wall-shadow)" : showGhost ? "0 2px 8px rgba(var(--ink-rgb), 0.25)" : "none",
                         animation: isLast ? "bl-snap 0.35s ease" : "none",
                         transition: "background 0.1s",
                       }}
@@ -243,8 +228,7 @@ export default function Board({
                           position: "absolute",
                           inset: -6,
                           borderRadius: gap + 6,
-                          boxShadow: "0 0 0 3px rgba(236,224,205,0.55)",
-                          animation: "bl-glow 0.9s ease-in-out 2",
+                          animation: "bl-glow-ring 0.9s ease-in-out 2",
                           pointerEvents: "none",
                         }}
                       />
@@ -291,19 +275,15 @@ export default function Board({
                         width: gap + 2,
                         borderRadius: gap,
                         background: placed
-                          ? "linear-gradient(90deg, #f0d6a2 0%, #d9ab68 45%, #b5823f 100%)"
+                          ? "var(--wall-color)"
                           : showGhost
                             ? valid
-                              ? "rgba(120,190,96,0.85)"
-                              : "rgba(184,80,64,0.85)"
+                              ? "rgba(var(--success-rgb), 0.85)"
+                              : "rgba(var(--danger-rgb), 0.85)"
                             : activeSlot
-                              ? "rgba(236,224,205,0.16)"
+                              ? "rgba(var(--ink-rgb), 0.14)"
                               : "transparent",
-                        boxShadow: placed
-                          ? "3px 0 6px rgba(0,0,0,0.55), 1px 0 0 rgba(255,255,255,0.25), inset 1px 0 0 rgba(255,255,255,0.5), inset -1px 0 1px rgba(90,55,20,0.5)"
-                          : showGhost
-                            ? "2px 0 8px rgba(0,0,0,0.35)"
-                            : "none",
+                        boxShadow: placed ? "var(--wall-shadow)" : showGhost ? "0 2px 8px rgba(var(--ink-rgb), 0.25)" : "none",
                         animation: isLast ? "bl-snap 0.35s ease" : "none",
                         transition: "background 0.1s",
                       }}
@@ -314,8 +294,7 @@ export default function Board({
                           position: "absolute",
                           inset: -6,
                           borderRadius: gap + 6,
-                          boxShadow: "0 0 0 3px rgba(236,224,205,0.55)",
-                          animation: "bl-glow 0.9s ease-in-out 2",
+                          animation: "bl-glow-ring 0.9s ease-in-out 2",
                           pointerEvents: "none",
                         }}
                       />
@@ -376,7 +355,7 @@ export default function Board({
                     position: "absolute",
                     inset: "10%",
                     borderRadius: "50%",
-                    border: "2px solid rgba(232,200,143,0.75)",
+                    border: "2px solid var(--accent)",
                     animation: "bl-highlight-ring 0.9s ease-out",
                   }}
                 />

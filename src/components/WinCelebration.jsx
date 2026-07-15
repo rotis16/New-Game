@@ -27,7 +27,7 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
   const reducedMotion = usePrefersReducedMotion();
   const [showCard, setShowCard] = useState(reducedMotion);
   const confetti = useMemo(() => makeConfetti(`${winner}-${moveCount}`), [winner, moveCount]);
-  const winnerColor = winner === 1 ? "#6fae5a" : "#c9695a";
+  const winnerColorVar = winner === 1 ? "var(--p1)" : "var(--p2)";
 
   useEffect(() => {
     if (reducedMotion) {
@@ -52,7 +52,7 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
               top: 0,
               bottom: 0,
               width: "40%",
-              background: "linear-gradient(90deg, transparent, rgba(255,240,210,0.35), transparent)",
+              background: "linear-gradient(90deg, transparent, rgba(var(--ink-rgb), 0.12), transparent)",
               animation: "bl-sweep 1.1s ease-out",
             }}
           />
@@ -66,7 +66,7 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
                 width: p.size,
                 height: p.size * 0.5,
                 borderRadius: 2,
-                background: winnerColor,
+                background: winnerColorVar,
                 opacity: 0.85,
                 transform: `rotate(${p.rotate}deg)`,
                 animation: `bl-confetti-fall ${p.duration}s ease-in ${p.delay}s both`,
@@ -78,12 +78,12 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
 
       <div style={{ marginTop: 20 }}>
         <div
+          className="bl-display"
           style={{
             textAlign: "center",
-            fontFamily: "'Fraunces', serif",
-            fontSize: 28,
-            fontWeight: 900,
-            color: winnerColor,
+            fontSize: 26,
+            fontWeight: 800,
+            color: winnerColorVar,
             marginBottom: 14,
           }}
         >
@@ -92,11 +92,9 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
 
         {showCard && (
           <div
+            className="bl-panel"
             style={{
               animation: reducedMotion ? "bl-fade-in 0.15s ease" : "bl-card-slide 0.4s ease",
-              background: "rgba(236,224,205,0.05)",
-              border: "1px solid rgba(236,224,205,0.1)",
-              borderRadius: 16,
               padding: 18,
             }}
           >
@@ -124,8 +122,10 @@ export default function WinCelebration({ winner, mode, difficulty, moveCount, wa
 function StatCell({ label, value }) {
   return (
     <div style={{ textAlign: "center", flex: 1 }}>
-      <div style={{ fontSize: 18, fontWeight: 700, color: "#f0e2c8", fontFamily: "'Fraunces', serif" }}>{value}</div>
-      <div style={{ fontSize: 10, color: "#8a7458", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 2 }}>{label}</div>
+      <div className="bl-display" style={{ fontSize: 18, fontWeight: 700, color: "var(--ink)" }}>
+        {value}
+      </div>
+      <div style={{ fontSize: 10, color: "var(--ink-faint)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 2 }}>{label}</div>
     </div>
   );
 }

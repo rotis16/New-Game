@@ -79,22 +79,24 @@ export default function Tutorial({ onFinish, onSkip }) {
                 width: 22,
                 height: 4,
                 borderRadius: 2,
-                background: i <= stepIndex ? "#d0a86a" : "rgba(236,224,205,0.15)",
+                background: i <= stepIndex ? "var(--accent)" : "rgba(var(--ink-rgb), 0.15)",
               }}
             />
           ))}
         </div>
         <button
           onClick={onSkip}
-          style={{ background: "transparent", border: "none", color: "#8a7458", fontSize: 12, fontWeight: 600, cursor: "pointer", minHeight: 32 }}
+          style={{ background: "transparent", border: "none", color: "var(--ink-faint)", fontSize: 12, fontWeight: 600, cursor: "pointer", minHeight: 32 }}
         >
           Skip
         </button>
       </div>
 
       <div style={{ textAlign: "center", marginBottom: 14 }}>
-        <div style={{ fontFamily: "'Fraunces', serif", fontWeight: 700, fontSize: 22, color: "#f0e2c8" }}>{step.title}</div>
-        <p style={{ color: "#a89072", fontSize: 13.5, margin: "8px auto 0", maxWidth: 320, lineHeight: 1.5 }}>{step.body}</p>
+        <div className="bl-display" style={{ fontWeight: 700, fontSize: 22, color: "var(--ink)" }}>
+          {step.title}
+        </div>
+        <p style={{ color: "var(--ink-soft)", fontSize: 13.5, margin: "8px auto 0", maxWidth: 320, lineHeight: 1.5 }}>{step.body}</p>
       </div>
 
       <Board

@@ -13,8 +13,12 @@
     "bench": "node scripts/ai-benchmark.mjs"
   },
   "dependencies": {
-    "@fontsource/fraunces": "^5.2.9",
-    "@fontsource/inter": "^5.2.8",
+    "@fontsource/bricolage-grotesque": "^5.2.10",
+    "@fontsource/fredoka": "^5.2.10",
+    "@fontsource/karla": "^5.2.8",
+    "@fontsource/sora": "^5.2.8",
+    "@fontsource/syne": "^5.2.7",
+    "@fontsource/work-sans": "^5.2.8",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

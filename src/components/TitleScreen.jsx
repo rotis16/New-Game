@@ -13,22 +13,19 @@ export default function TitleScreen({ onStart, onOpenStats, onOpenSettings, onOp
       </div>
       <div style={{ textAlign: "center", marginBottom: 8 }}>
         <h1
+          className="bl-display"
           style={{
-            fontFamily: "'Fraunces', serif",
-            fontWeight: 900,
-            fontSize: 60,
+            fontWeight: 800,
+            fontSize: 52,
             lineHeight: 1,
-            margin: "0",
-            letterSpacing: "-0.02em",
-            background: "linear-gradient(180deg, #f6ead6 0%, #d8b88a 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textShadow: "0 2px 20px rgba(216,184,138,0.15)",
+            margin: 0,
+            letterSpacing: "-0.01em",
+            color: "var(--ink)",
           }}
         >
           Blocade
         </h1>
-        <p style={{ color: "#a89072", fontSize: 14, margin: "10px 0 0" }}>
+        <p style={{ color: "var(--ink-soft)", fontSize: 14, margin: "10px 0 0" }}>
           Race across the board. Wall them in. Win the line.
         </p>
       </div>
@@ -49,21 +46,7 @@ export default function TitleScreen({ onStart, onOpenStats, onOpenSettings, onOp
               <button
                 key={d}
                 onClick={() => setSelDiff(d)}
-                style={{
-                  flex: 1,
-                  padding: "10px 0",
-                  minHeight: 44,
-                  borderRadius: 10,
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  fontWeight: 600,
-                  fontSize: 13,
-                  textTransform: "capitalize",
-                  transition: "all 0.15s",
-                  background: selDiff === d ? "#ece0cd" : "rgba(236,224,205,0.06)",
-                  color: selDiff === d ? "#20160f" : "#a89072",
-                }}
+                className={`bl-pill${selDiff === d ? " active" : ""}`}
               >
                 {d}
               </button>
@@ -72,28 +55,7 @@ export default function TitleScreen({ onStart, onOpenStats, onOpenSettings, onOp
         </div>
       )}
 
-      <button
-        onClick={() => onStart(selMode, selDiff)}
-        style={{
-          width: "100%",
-          marginTop: 34,
-          padding: "18px 0",
-          minHeight: 44,
-          borderRadius: 14,
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "'Fraunces', serif",
-          fontWeight: 600,
-          fontSize: 20,
-          color: "#20160f",
-          background: "linear-gradient(180deg, #e8c88f 0%, #d0a86a 100%)",
-          boxShadow: "0 8px 24px rgba(208,168,106,0.25), inset 0 1px 0 rgba(255,255,255,0.3)",
-          transition: "transform 0.1s",
-        }}
-        onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.98)")}
-        onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
+      <button onClick={() => onStart(selMode, selDiff)} className="bl-btn-primary" style={{ width: "100%", marginTop: 34 }}>
         Start Game
       </button>
 
@@ -108,22 +70,7 @@ export default function TitleScreen({ onStart, onOpenStats, onOpenSettings, onOp
 
 function TitleLink({ children, onClick }) {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        flex: 1,
-        padding: "12px 0",
-        minHeight: 44,
-        borderRadius: 10,
-        border: "1px solid rgba(236,224,205,0.1)",
-        background: "rgba(236,224,205,0.03)",
-        color: "#c4b299",
-        fontFamily: "inherit",
-        fontSize: 12.5,
-        fontWeight: 600,
-        cursor: "pointer",
-      }}
-    >
+    <button onClick={onClick} className="bl-link-btn">
       {children}
     </button>
   );
